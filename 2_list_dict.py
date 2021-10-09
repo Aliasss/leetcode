@@ -41,3 +41,57 @@ print(a)
 # pop()에는 값이 아니라 인덱스를 입력값으로 넣는다.
 a.pop(2)
 print(a)
+
+
+""" 딕셔너리
+- len(a)의 시간복잡도: O(1), 요소의 개수를 리턴한다
+- a[key]의 시간복잡도: O(1), 키를 조회하여 값을 리턴한다
+- a[key] = value의 시간복잡도: O(1), 키/값을 삽입한다
+- key in a의 시간복잡도: O(1), 딕셔너리에 키가 존재하는지 확인한다
+
+딕셔너리와 관련된 다양한 모듈
+- collections.OrderedDict() : 입력 순서 유지되는 자료형
+- collections.defaultdict() : 조회 시 항상 디폴트 값을 생성해 키 오류를 방지
+- collections.Counter() : 요소의 값을 키로 하고 개수를 값 형태로 만들어 카운팅
+
+"""
+# 딕셔너리에서 존재하지 않는 키를 조회하면 KeyError 에러가 발생한다.
+# 존재하지 않는 키가 있을 때 예외처리를 하면, 나중에 삽입하는 등 추가작업을 할 수 있어 유용
+a = {'key1':'value1', 'key2':'value2'}
+a['key3'] = 'value3'
+print(a)
+
+try:
+    print(a['key4'])
+except KeyError:
+    print('존재하지 않는 키')
+
+# 딕셔너리에 있는 키/값은 for 반복문으로 조회 가능
+for k, v in a.items():
+    print(k, v)
+
+# 딕셔너리 키 삭제
+del a['key1']
+print(a)
+
+# 딕셔너리 모듈
+# default 객체는 존재하지 않는 키를 조회할 때, 에러 메시지를 출력하는 대신 디폴트 값을 기준으로 해당 키에 대한 딕셔너리 아이템을 생성
+import collections
+a = collections.defaultdict(int)
+a['A'] = 5
+a['B'] = 4
+a['C'] += 1    # 기존의 딕셔너리라면 KeyError 발생해야 함
+print(a)  # 그러나, defaultdict는 에러없이 디폴트인 0을 기준으로 +1 연산한 결과를 출력
+
+# Counter 객체
+# 아이템에 대한 개수를 계산해 딕셔너리로 리턴
+a = [1, 2, 3, 4, 5, 5, 5, 6, 6]
+b = collections.Counter(a)
+print(b)
+
+# Counter 객체에서 가장 빈도 수가 높은 요소 2개 추출
+print(b.most_common(2))
+
+# OrderDict 객체
+# 입력 그대로 순서 유지. 그러나 파이썬 3.7부터 기본 딕셔너리도 내부적으로 인덱스를 이용해 입력 순서가 유지되도록 개선. 따라서, 기본 딕셔너리만 사용해도 입력 순서가 유지됨.
+# 그러나, 파이썬 3.6 이하를 사용하는 경우도 많기 때문에 유이해야 함
