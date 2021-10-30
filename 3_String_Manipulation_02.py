@@ -60,12 +60,69 @@ reorder_log = reorder_log_1()
 print(reorder_log.reorder_log(logs))
 
 
+# 04 가장 흔한 단어
+""" 금지된 단어를 제외한 가장 흔하게 등장하는 단어를 출력. 대소문자 구분 하지 않으며 구두점도 무시"""
+# (1) List Comprehension, Counter
+# defaultdict(): default 객체는 존재하지 않는 키를 조회할 때, 에러 메시지를 출력하는 대신 디폴트 값을 기준으로 해당 키에 대한 딕셔너리 아이템을 생성
+
+import collections
+import re
+
+class Count():
+    
+    def most_common_words(self, paragraph: str, banned: list) -> str:
+        words = [word for word in re.sub(r'[^\w]', ' ', paragraph).lower().split() if word not in banned]
+
+        counts = collections.Counter(words)
+        # 가장 흔하게 등장하는 단어의 첫 번째 값을 most_common(1)로 추출. 문제의 입력값에서는 [('ball', 2)]가 되며 이 값의 [0][0]을 추출해서 key인 'ball'을 출력하낟.
+        
+        return counts.most_common(1)[0]  
+
+paragraph = "Bob hit a ball, the hit BALL flew far after it was hit."
+banned = ['hit']
+Count = Count()
+print(Count.most_common_words(paragraph, banned))
 
 
+# defaultdict 활용 (디폴트: 0)
+class Count2():
+    
+    def most_common_words2(self, paragraph: str, banned: list) -> str:
+        words = [word for word in re.sub(r'[^\w]', ' ', paragraph).lower().split() if word not in banned]
+
+        counts = collections.defaultdict(int)
+        for word in words:
+            counts[word] += 1
+
+        return max(counts, key=counts.get)  # 딕셔너리.get(접근할 키)
+
+paragraph = "Bob hit a ball, the hit BALL flew far after it was hit."
+banned = ['hit']
+Count2 = Count2()
+print(Count2.most_common_words2(paragraph, banned))
 
 
+# 05 그룹 애너그램
+"""문자열 배열을 받아 내러그램 단위로 그룹핑하라.
+애너그램: 문자를 재배열하여 다른 뜻을 가진 단어로 바꾸는 것. '문전박대', '대박전문' """
+
+# 풀이 1. 정렬하여 딕셔너리에 추가
+# sroted()로 정렬한 리스트 형태의 결과를 join()으로 합쳐서 딕셔너리 구성
+
+def Ana(strs: list) -> list:
+    anagrams = collections.defaultdict(list)   # 디폴트 값이 리스트. 값을 지정하지 않으면 빈 리스트
+
+    for word in strs:
+        # 정렬하여 딕셔너리에 추가
+        anagrams[''.join(sorted(word))].append(word)    # aet, ant, abt 라는 3개의 key 생성. 거기에 해당하는 word를 추가
+
+    return anagrams.values()
+
+strs = ['eat', 'tea', 'tan', 'ate', 'nat', 'bat']
+print(Ana(strs))
 
 
+# 여러가지 정렬방법
 
 
 
